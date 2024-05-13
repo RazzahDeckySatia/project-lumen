@@ -7,39 +7,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stuff extends Model
 {
-    //jika di migrationnya menggunakan $table->softdeletes
-    use SoftDeletes;
+    use SoftDeletes; // optional, digunakan hanya untuk table yang menggunakan fitur softdeletes
+    protected $fillable = ["name", "category"];
 
-    //fillable / guard
-    //menentukan column wajib diisi (column yg bisa diisi dari luar)
-    protected $fillable = ["name","category"];
-    //protected $guarded = ['id']
+    public $table = 'stuffs';
 
-    //property opsional :
-    //kalau primary key bukan id : public $primarykey = 'no'
-    //kalau misal gapake timestamps di migration : public $timestamps = FALSE
-
-     // relasi
-     //nama function : samain kaya model, kata pertama huruf kecil
-     //model yang PK : hasOne/ hanMany
-     //panggil namaModelFk::class
+    // mendifinisikan relasi
+    // table yang berperan sebagai Primary Key : hasOne / hasMany / ...
+    // table yang berperan sebagai Foreign Key : belongsTo
+    // nama function disarankan menggunakan aturan berikut :
+    // 1. one to one : nama model yang terhubung versi tunggal
+    // 2. one to many : nama model yang terhubung versi jamak (untuk foreign key nya)
     public function stuffStock()
     {
         return $this->hasOne(StuffStock::class);
     }
 
-    //relasi hasMany : nama func jamak
     public function inboundStuffs()
     {
-        return $this ->hasMany(Inbounstuff::class);
+        return $this->hasMany(InboundStuff::class);
     }
 
     public function lendings()
     {
         return $this->hasMany(Lending::class);
     }
-
-
-
 }
-
